@@ -6,24 +6,22 @@
     <title>CHARTECH Messenger</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-dark">
+<body class="theme-black-gold">
     <!-- Écran d'authentification -->
-    <div id="authScreen">
-        <div class="auth-box">
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
             <h2>CHARTECH</h2>
             <div class="auth-tabs">
-                <button class="auth-tab active" onclick="showAuthTab('login')">Connexion</button>
-                <button class="auth-tab" onclick="showAuthTab('register')">Inscription</button>
+                <button class="auth-tab active" data-tab="login">Connexion</button>
+                <button class="auth-tab" data-tab="register">Inscription</button>
             </div>
             <div id="loginForm" class="auth-form active">
                 <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Mot de passe" required>
                 <button onclick="login()">Se connecter</button>
             </div>
             <div id="registerForm" class="auth-form">
-                <input type="text" id="registerName" placeholder="Nom d'utilisateur" required>
+                <input type="text" id="registerName" placeholder="Pseudo" required>
                 <input type="email" id="registerEmail" placeholder="Email" required>
-                <input type="password" id="registerPassword" placeholder="Mot de passe" required>
                 <input type="file" id="registerPhoto" accept="image/*">
                 <button onclick="register()">S'inscrire</button>
             </div>
@@ -31,93 +29,82 @@
     </div>
 
     <!-- Application principale -->
-    <div id="mainApp" class="hidden">
-        <div class="app-container">
-            <!-- Barre latérale -->
-            <div class="sidebar">
-                <div class="profile">
-                    <img id="profilePic" src="default-avatar.png" alt="Profile">
-                    <span id="profileName"></span>
+    <div id="mainApp" class="main-app hidden">
+        <div class="sidebar">
+            <div class="profile">
+                <img id="profilePic" src="default-avatar.png" alt="Avatar">
+                <span id="profileName"></span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-section="chats">💬 Chats</button>
+                <button class="nav-btn" data-section="groups">👥 Groupes</button>
+                <button class="nav-btn" data-section="ia">🤖 IA</button>
+                <button class="nav-btn" data-section="settings">⚙️ Paramètres</button>
+            </nav>
+        </div>
+        <div class="main-content">
+            <!-- Section Chats -->
+            <div id="chatsSection" class="section active">
+                <div class="section-header">
+                    <h3>Conversations</h3>
+                    <button onclick="showNewChatModal()">➕</button>
                 </div>
-                <div class="sidebar-tabs">
-                    <button class="sidebar-tab active" onclick="showMainTab('chats')">💬 Chats</button>
-                    <button class="sidebar-tab" onclick="showMainTab('groups')">👥 Groupes</button>
-                    <button class="sidebar-tab" onclick="showMainTab('ai')">🤖 IA</button>
-                    <button class="sidebar-tab" onclick="showMainTab('settings')">⚙️ Paramètres</button>
-                </div>
-                <div class="ad-banner">
-                    📢 Publicité - Soutiens CHARTECH !
+                <div id="chatsList" class="items-list"></div>
+                <div id="chatArea" class="chat-area hidden">
+                    <div class="chat-header">
+                        <span id="currentChatName"></span>
+                        <button onclick="closeChat()">✕</button>
+                    </div>
+                    <div id="messages" class="messages"></div>
+                    <div class="message-input">
+                        <input type="text" id="messageText" placeholder="Écrire un message...">
+                        <button onclick="sendMessage()">Envoyer</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Contenu principal -->
-            <div class="main-content">
-                <!-- Section Chats -->
-                <div id="chatsSection" class="main-section active">
-                    <div class="section-header">
-                        <h3>Conversations</h3>
-                        <button onclick="showNewChatModal()">➕</button>
-                    </div>
-                    <div id="chatsList" class="items-list"></div>
-                    <div class="chat-area hidden" id="chatArea">
-                        <div class="chat-area-header">
-                            <span id="currentChatName"></span>
-                            <button onclick="closeChat()">✕</button>
-                        </div>
-                        <div class="messages" id="messages"></div>
-                        <div class="message-input">
-                            <input type="text" id="messageText" placeholder="Écrire un message...">
-                            <button onclick="startVoiceRecording()">🎤</button>
-                            <button onclick="sendMessage()">Envoyer</button>
-                        </div>
+            <!-- Section Groupes -->
+            <div id="groupsSection" class="section">
+                <div class="section-header">
+                    <h3>Groupes</h3>
+                    <button onclick="showNewGroupModal()">➕</button>
+                </div>
+                <div id="groupsList" class="items-list"></div>
+            </div>
+
+            <!-- Section IA -->
+            <div id="iaSection" class="section">
+                <div class="section-header">
+                    <h3>Assistant IA</h3>
+                </div>
+                <div id="iaMessages" class="messages"></div>
+                <div class="message-input">
+                    <input type="text" id="iaInput" placeholder="Pose ta question...">
+                    <button onclick="sendIAMessage()">Envoyer</button>
+                </div>
+            </div>
+
+            <!-- Section Paramètres -->
+            <div id="settingsSection" class="section">
+                <h3>Paramètres</h3>
+                <div class="settings-group">
+                    <label>Thème :</label>
+                    <div class="theme-buttons">
+                        <button onclick="setTheme('black-gold')">Noir Or</button>
+                        <button onclick="setTheme('blue-neon')">Bleu Néon</button>
+                        <button onclick="setTheme('red-light')">Rouge Clair</button>
+                        <button onclick="setTheme('green-very')">Vert</button>
+                        <button onclick="setTheme('light-blue')">Clair Bleu</button>
                     </div>
                 </div>
-
-                <!-- Section Groupes -->
-                <div id="groupsSection" class="main-section">
-                    <div class="section-header">
-                        <h3>Groupes</h3>
-                        <button onclick="showNewGroupModal()">➕</button>
-                    </div>
-                    <div id="groupsList" class="items-list"></div>
-                </div>
-
-                <!-- Section IA -->
-                <div id="aiSection" class="main-section">
-                    <div class="ai-container">
-                        <h3>Assistant IA CHARTECH</h3>
-                        <div class="ai-buttons">
-                            <button id="deepThinkBtn" onclick="toggleDeepThink()">🧠 Réfléchir profond</button>
-                            <button id="webSearchBtn" onclick="toggleWebSearch()">🌐 Recherche en ligne</button>
-                        </div>
-                        <div id="aiThinking" class="ai-thinking hidden">🤖 réfléchit...</div>
-                        <div class="ai-messages" id="aiMessages"></div>
-                        <div class="ai-input">
-                            <input type="text" id="aiInput" placeholder="Pose ta question...">
-                            <button onclick="sendAIMessage()">Envoyer</button>
-                        </div>
-                        <div class="ai-media-input">
-                            <input type="file" id="aiMedia" accept="image/*,video/*,audio/*" multiple>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section Paramètres -->
-                <div id="settingsSection" class="main-section">
-                    <h3>Paramètres</h3>
-                    <div class="theme-selector">
-                        <label>Thème :</label>
-                        <button onclick="setTheme('dark')">Sombre</button>
-                        <button onclick="setTheme('light')">Clair</button>
-                        <button onclick="setTheme('blue-night')">Bleu nuit</button>
-                    </div>
-                    <div class="language-selector">
-                        <label>Langue :</label>
+                <div class="settings-group">
+                    <label>Langue :</label>
+                    <div class="lang-buttons">
                         <button onclick="setLanguage('fr')">Français</button>
                         <button onclick="setLanguage('en')">English</button>
                     </div>
-                    <button onclick="logout()">Déconnexion</button>
                 </div>
+                <button onclick="logout()" class="logout-btn">Déconnexion</button>
             </div>
         </div>
     </div>
@@ -142,10 +129,8 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/recordrtc/5.6.2/RecordRTC.js"></script>
+    <!-- Scripts Firebase (compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <script src="script.js"></script>
